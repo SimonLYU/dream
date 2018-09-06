@@ -47,15 +47,149 @@ function ui.configUI()
 						["color"] = "255,108,88",
 					},
 					{
-						["id"] = "CheckBoxGroup1",
-						["type"] = "CheckBoxGroup",
-						["size"] = 40,
-						["list"] = "每日任务",
-						["select"] = "0",
+						
+						["type"] = "RadioGroup",
+						["id"] = "MissionRadioGroup",
+						["list"] = "每日任务副本一条龙,指定副本无限刷",
+						["select"] = "0"	,
 						["color"] = "255,255,255",
+					},
+					
+					{
+						["type"] = "Label",
+						["text"] = "无限刷副本:",
+						["size"] = 40,
+						["align"] = "left",
+						["color"] = "255,108,88",
+					},
+					{
+						["id"] = "EndlessMissionComboBox",
+						["type"] = "ComboBox",
+						["size"] = 40,
+						["list"] = "兄贵健身房,安杰利卡特训屋等级,女神的试炼,羁绊之地",
+						["color"] = "255,108,88",
+						["select"] = "0"
 					},
 				}
 			},
+			{
+				["type"] = "Page",
+				["text"] = "副本等级设置",
+				["views"] = {
+					{
+						["type"] = "Label",
+						["text"] = "兄贵健身房教练和等级:",
+						["size"] = 40,
+						["align"] = "left",
+						["color"] = "255,108,88",
+					},
+					{
+						["id"] = "JiaoLianComboBox",
+						["type"] = "ComboBox",
+						["size"] = 40,
+						["list"] = "安东(步兵),琼斯(弓刺),巴兰(枪兵),洛基(飞水),萨姆森(骑兵),尼姆(僧侣)",
+						["color"] = "255,108,88",
+						["select"] = "1"
+					},
+					{
+						["id"] = "XiongGuiComboBox",
+						["type"] = "ComboBox",
+						["size"] = 40,
+						["list"] = "15,20,25,30,35,40,45,50,55,60,65",
+						["color"] = "255,108,88",
+						["select"] = "6"
+					},
+					{
+						["type"] = "Label",
+						["text"] = "安杰利卡特训屋等级:",
+						["size"] = 40,
+						["align"] = "left",
+						["color"] = "255,108,88",
+					},
+					{
+						["id"] = "TeXunComboBox",
+						["type"] = "ComboBox",
+						["size"] = 40,
+						["list"] = "15,20,25,30,35,40,45,50,55,60",
+						["color"] = "255,108,88",
+						["select"] = "6"
+					},
+					{
+						["type"] = "Label",
+						["text"] = "女神的试炼等级:",
+						["size"] = 40,
+						["align"] = "left",
+						["color"] = "255,108,88",
+					},
+					{
+						["id"] = "ShiLianComboBox",
+						["type"] = "ComboBox",
+						["size"] = 40,
+						["list"] = "20,25,30,35,40,45,50,55,60,65",
+						["color"] = "255,108,88",
+						["select"] = "5"
+					},
+					{
+						["type"] = "Label",
+						["text"] = "逃跑的宝藏等级:",
+						["size"] = 40,
+						["align"] = "left",
+						["color"] = "255,108,88",
+					},
+					{
+						["id"] = "BaoZangCheckBoxGroup",
+						["type"] = "CheckBoxGroup",
+						["size"] = 20,
+						["list"] = "开启自动副本<逃跑的宝藏>(自动可能会降低收益 开启后 等级设置才会生效)",
+						["select"] = "",
+						["color"] = "255,255,255",
+					},
+					{
+						["id"] = "BaoZangComboBox",
+						["type"] = "ComboBox",
+						["size"] = 40,
+						["list"] = "20,25,30,35,40,45,50,55,60",
+						["color"] = "255,108,88",
+						["select"] = "5"
+					},
+					{
+						["type"] = "Label",
+						["text"] = "羁绊之地等级:",
+						["size"] = 40,
+						["align"] = "left",
+						["color"] = "255,108,88",
+					},
+					{
+						["id"] = "JiBanComboBox",
+						["type"] = "ComboBox",
+						["size"] = 40,
+						["list"] = "25,30,35,40,45,50,55,60,65",
+						["color"] = "255,108,88",
+						["select"] = "4"
+					},
+				}
+			},
+			{
+				["type"] = "Page",
+				["text"] = "副本等级设置",
+				["views"] = {
+					{
+						["type"] = "Label",
+						["text"] = "自动补充体力:",
+						["size"] = 40,
+						["align"] = "left",
+						["color"] = "255,108,88",
+					},
+					{
+						["id"] = "TiLiComboBox",
+						["type"] = "ComboBox",
+						["size"] = 40,
+						["list"] = "不补充,面包补充,钻石补充",
+						["color"] = "255,108,88",
+						["select"] = "0"
+					},
+				}
+			}
 		}
 	}
 	return uiTable

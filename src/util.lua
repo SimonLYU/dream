@@ -29,7 +29,7 @@ end
 
 --私有方法
 function moveFromTo(fromX,fromY,toX,toY)
-	mSleep(5)
+	mSleep(3)
 	--x
 	if fromX ~= toX then
 		if fromX > toX then
@@ -66,7 +66,8 @@ end
 -- 找色
 function util.findColor(color,degree,x1,y1,x2,y2)
 	keepScreen(true)
-	resultX , resultY = findColorInRegionFuzzy(color,degree,x1,y1,x2,y2,0,0)
+--	resultX , resultY = findColorInRegionFuzzy(color,degree,x1,y1,x2,y2,0,0)--低效
+	resultX , resultY = findColor({x1,y1,x2,y2},color,degree,0,0,0)	
 	keepScreen(false)
 	return resultX,resultY;
 end
