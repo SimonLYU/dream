@@ -81,7 +81,7 @@ end
 function util.initMyHud()
 	screen_width,screen_height = getScreenSize()
 	my_hud_id = createHUD()
-	showHUD(my_hud_id,"主人,欢迎您回来,准备好了我们就开始吧~",hud_text_font_size,hud_text_color,hud_background_color,3,0,screen_width  * (1 - 0.195),screen_width * 0.7,screen_height  * 0.055)
+	showHUD(my_hud_id,"听后指挥官大人差遣~",hud_text_font_size,hud_text_color,hud_background_color,3,0,screen_width  * (1 - 0.195),screen_width * 0.7,screen_height  * 0.055)
 end
 ----初始化自定义hud2
 --function util.initSecondHud()

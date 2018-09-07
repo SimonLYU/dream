@@ -34,13 +34,6 @@ function ui.configUI()
 					},
 					{
 						["type"] = "Label",
-						["text"] = "ps:脚本开启后请勿手动操作,可能会导致脚本卡住!!",
-						["size"] = 25,
-						["align"] = "left",
-						["color"] = "255,108,88",
-					},
-					{
-						["type"] = "Label",
 						["text"] = "基本功能",
 						["size"] = 40,
 						["align"] = "left",
@@ -62,11 +55,18 @@ function ui.configUI()
 						["align"] = "left",
 						["color"] = "255,108,88",
 					},
+										{
+						["type"] = "Label",
+						["text"] = "ps:选择指定副本无限刷后,以下设置即可生效",
+						["size"] = 25,
+						["align"] = "left",
+						["color"] = "255,108,88",
+					},
 					{
 						["id"] = "EndlessMissionComboBox",
 						["type"] = "ComboBox",
 						["size"] = 40,
-						["list"] = "兄贵健身房,安杰利卡特训屋等级,女神的试炼,羁绊之地",
+						["list"] = "兄贵健身房,安杰利卡特训屋等级,女神的试炼,羁绊之地,黑暗之契约书",
 						["color"] = "255,108,88",
 						["select"] = "0"
 					},
@@ -167,11 +167,26 @@ function ui.configUI()
 						["color"] = "255,108,88",
 						["select"] = "4"
 					},
+										{
+						["type"] = "Label",
+						["text"] = "黑暗之契约书等级:",
+						["size"] = 40,
+						["align"] = "left",
+						["color"] = "255,108,88",
+					},
+					{
+						["id"] = "TimeLimit3ComboBox",
+						["type"] = "ComboBox",
+						["size"] = 40,
+						["list"] = "35,45,55",
+						["color"] = "255,108,88",
+						["select"] = "4"
+					},
 				}
 			},
 			{
 				["type"] = "Page",
-				["text"] = "副本等级设置",
+				["text"] = "补充体力设置",
 				["views"] = {
 					{
 						["type"] = "Label",

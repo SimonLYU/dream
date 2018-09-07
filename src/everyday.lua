@@ -1,11 +1,14 @@
 require "util"
 require "public"
 STEP_everyDay = 0
+STEP_receiveAward = 0
 
 TARGET = 0
 
 everyday = {}
 
+
+--------------------------每日任务/无限任务--------------------------
 jiaoLianNameList = {"安东(步兵)","琼斯(弓刺)","巴兰(枪兵)","洛基(飞水)","萨姆森(骑兵)","尼姆(僧侣)"}
 levelList = {15,20,25,30,35,40,45,50,55,60,65}
 --0点击秘境
@@ -13,34 +16,6 @@ function func_clickMiJing()
 	util.click(2123,406)
 	util.hudToast("点击秘境")
 	STEP_everyDay = 1
-end
-
---14 手动任务选择器
-function func_chooseTarget()
-	endlessMissionTarget = _G["endlessMission"]
-	
-	--切换到日常界面
-	util.click(2000,526)
-	util.hudToast("选择日常任务")
-	mSleep(500)
-	
-	
-	if endlessMissionTarget == 0 then
-	STEP_everyDay = 2--兄贵健身房任务头
-elseif endlessMissionTarget == 1 then
-STEP_everyDay = 6--安杰利卡特训屋任务头
-elseif endlessMissionTarget == 2 then
-STEP_everyDay = 8--女神的试炼任务头
-elseif endlessMissionTarget == 3 then
---翻页
-util.hudToast("翻页中...")
-util.move(1117,1100,1117,335)
-mSleep(250)
-STEP_everyDay = 12 --羁绊之地任务头
-else
-STEP_everyDay = util.ERROR_CODE
-end
-
 end
 
 --1 任务选择器
@@ -95,6 +70,46 @@ function func_autoChooseTarget()
 		return 0
 	end
 	
+	util.hudToast("已经没有附带奖励的副本了")
+	STEP_everyDay = util.ERROR_CODE --没有任务直接跳到最后
+	_G["everyDayFinished"] = true
+	
+end
+
+--1 手动任务选择器(无限任务用)
+function func_chooseTarget()
+	endlessMissionTarget = _G["endlessMission"]
+	if endlessMissionTarget == 0 or endlessMissionTarget == 1 or endlessMissionTarget == 2 or endlessMissionTarget == 3 then
+	--切换到日常界面
+	util.click(2000,526)
+	util.hudToast("选择日常任务")
+	mSleep(500)
+else
+	--切换到日常界面
+	util.click(2000,720)
+	util.hudToast("选择限时任务")
+	mSleep(500)
+end
+
+
+if endlessMissionTarget == 0 then
+STEP_everyDay = 2--兄贵健身房任务头
+elseif endlessMissionTarget == 1 then
+STEP_everyDay = 6--安杰利卡特训屋任务头
+elseif endlessMissionTarget == 2 then
+STEP_everyDay = 8--女神的试炼任务头
+elseif endlessMissionTarget == 3 then
+--翻页
+util.hudToast("翻页中...")
+util.move(1117,1100,1117,335)
+mSleep(250)
+STEP_everyDay = 12 --羁绊之地任务头
+elseif endlessMissionTarget == 4 then
+STEP_everyDay = 14 --黑暗之契约书任务头
+else
+STEP_everyDay = util.ERROR_CODE
+end
+
 end
 
 --2 兄贵任务
@@ -281,6 +296,37 @@ function func_chooseJiBanLevel()
 	end
 end
 
+--14 限时任务3(当前为:黑暗之契约书-波赞鲁)
+function func_timeLimitMission3()
+	util.click(1120,880)
+	util.hudToast("点击黑暗之契约书")
+	STEP_everyDay = 15
+end
+
+--15 选择限时任务3等级
+function func_chooseTimeLimitMission3Level()
+	levelNum = _G["timeLimit3Level"]
+	
+	if levelNum == 0 then
+		util.click(1845,397)
+	elseif levelNum == 1 then
+		util.click(1845,660)
+	elseif levelNum == 2 then
+		util.click(1845,920)
+	else
+		util.click(1845,397)
+	end
+	
+	util.hudToast("选择"..levelList[2*levelNum+5].."级")
+	if public.dealTiLiAlert() then
+		STEP_everyDay = util.ERROR_CODE
+		util.hudToast("体力不足,重试")
+	else
+		STEP_everyDay = 5
+	end
+	
+end
+
 --5 自动游戏中检测
 function func_playingGame()
 	util.hudToast("自动游戏中...")
@@ -293,19 +339,73 @@ function func_playingGame()
 	end
 end
 
---main
+--------------------------领取奖励--------------------------
+--0 初始化界面位置
+function func_startInit()
+	public.func_start_init()
+	STEP_receiveAward = 1
+end
+
+--1 查看是否有可领取的奖励
+function func_checkAward()
+	util.hudToast("准备领取奖励")
+	util.click(1228,1147)
+	STEP_receiveAward = 2
+end
+
+--2 循环领取奖励
+function func_receiveAwardTimeByTime()
+	x , y = util.findColor(0x3adcf3, 90, 1473, 243, 1738, 306)--领取任务:蓝色
+	x1 , y1 = util.findColor(0xc60017, 90, 1473, 243, 1738, 306)--已领取:红色
+	if x > -1 and x1 <= -1 then
+		util.hudToast("领取奖励")
+		util.click(1600,272)--点击领取
+		mSleep(1000)
+		public.clickLocation()--点击空白
+		mSleep(500)
+		public.clickLocation()--多点击一次,防止升级提示出现
+		mSleep(500)
+		func_receiveAwardTimeByTime()
+	else
+		util.hudToast("奖励领取完毕")
+		STEP_receiveAward = util.ERROR_CODE
+	end
+end
+--------------------------主任务--------------------------
+--领取奖励
+function everyday.receiveAward()
+	mSleep(500)
+	if STEP_receiveAward == 0 then
+		func_startInit()
+		everyday.receiveAward()
+	elseif STEP_receiveAward == 1 then
+		func_checkAward()
+		everyday.receiveAward()
+	elseif STEP_receiveAward == 2 then
+		public.waitUntilViewDidAppear()
+		func_receiveAwardTimeByTime()
+		everyday.receiveAward()
+	elseif STEP_receiveAward == util.ERROR_CODE then
+		STEP_receiveAward = 0
+		public.closeMenuIfNecessary()
+	end
+end
+
+--每日任务
 function everyday.everyday_main()
 	mSleep(1000)
 	if STEP_everyDay == 0 then
 		func_clickMiJing()
 		everyday.everyday_main()
 	elseif STEP_everyDay == 1 then--任务选择器
+		public.waitUntilViewDidAppear()
 		func_autoChooseTarget()
 		everyday.everyday_main()
 	elseif STEP_everyDay == 2 then --兄贵:任务开始
 		func_xiongGui()
 		everyday.everyday_main()
 	elseif STEP_everyDay == 3 then --兄贵:选择教练
+		public.waitUntilViewDidAppear()
 		func_chooseJiaoLian()
 		everyday.everyday_main()
 	elseif STEP_everyDay == 4 then --兄贵:选择等级
@@ -315,24 +415,28 @@ function everyday.everyday_main()
 		func_teXun()
 		everyday.everyday_main()
 	elseif STEP_everyDay == 7 then --特训屋:选择等级
+		public.waitUntilViewDidAppear()
 		func_chooseTeXunLevel()
 		everyday.everyday_main()
 	elseif STEP_everyDay == 8 then --女神试炼:任务开始
 		func_shiLian()
 		everyday.everyday_main()
 	elseif STEP_everyDay == 9 then --女神试炼:选择等级
+		public.waitUntilViewDidAppear()
 		func_chooseShiLianLevel()
 		everyday.everyday_main()
 	elseif STEP_everyDay == 10 then --宝藏:任务开始
 		func_baoZang()
 		everyday.everyday_main()
 	elseif STEP_everyDay == 11 then --宝藏:选择等级
+		public.waitUntilViewDidAppear()
 		func_chooseBaoZangLevel()
 		everyday.everyday_main()
 	elseif STEP_everyDay == 12 then --羁绊:任务开始
 		func_jiBan()
 		everyday.everyday_main()
 	elseif STEP_everyDay == 13 then --羁绊:选择等级
+		public.waitUntilViewDidAppear()
 		func_chooseJiBanLevel()
 		everyday.everyday_main()
 	elseif STEP_everyDay == 5 then --自动游戏中
@@ -344,18 +448,21 @@ function everyday.everyday_main()
 	end
 end
 
+--无限任务
 function everyday.endlessMission()
-mSleep(1000)
+mSleep(500)
 if STEP_everyDay == 0 then
 	func_clickMiJing()
 	everyday.endlessMission()
 elseif STEP_everyDay == 1 then--任务选择器
+	public.waitUntilViewDidAppear()
 	func_chooseTarget()
 	everyday.endlessMission()
 elseif STEP_everyDay == 2 then --兄贵:任务开始
 	func_xiongGui()
 	everyday.endlessMission()
 elseif STEP_everyDay == 3 then --兄贵:选择教练
+	public.waitUntilViewDidAppear()
 	func_chooseJiaoLian()
 	everyday.endlessMission()
 elseif STEP_everyDay == 4 then --兄贵:选择等级
@@ -365,25 +472,36 @@ elseif STEP_everyDay == 6 then --特训屋:任务开始
 	func_teXun()
 	everyday.endlessMission()
 elseif STEP_everyDay == 7 then --特训屋:选择等级
+	public.waitUntilViewDidAppear()
 	func_chooseTeXunLevel()
 	everyday.endlessMission()
 elseif STEP_everyDay == 8 then --女神试炼:任务开始
 	func_shiLian()
 	everyday.endlessMission()
 elseif STEP_everyDay == 9 then --女神试炼:选择等级
+	public.waitUntilViewDidAppear()
 	func_chooseShiLianLevel()
 	everyday.endlessMission()
 elseif STEP_everyDay == 10 then --宝藏:任务开始
 	func_baoZang()
 	everyday.endlessMission()
 elseif STEP_everyDay == 11 then --宝藏:选择等级
+	public.waitUntilViewDidAppear()
 	func_chooseBaoZangLevel()
 	everyday.endlessMission()
 elseif STEP_everyDay == 12 then --羁绊:任务开始
 	func_jiBan()
 	everyday.endlessMission()
 elseif STEP_everyDay == 13 then --羁绊:选择等级
+	public.waitUntilViewDidAppear()
 	func_chooseJiBanLevel()
+	everyday.endlessMission()
+elseif STEP_everyDay == 14 then --限时3:任务开始
+	func_timeLimitMission3()
+	everyday.endlessMission()
+elseif STEP_everyDay == 15 then --限时3:选择等级
+	public.waitUntilViewDidAppear()
+	func_chooseTimeLimitMission3Level()
 	everyday.endlessMission()
 elseif STEP_everyDay == 5 then --自动游戏中
 	func_playingGame()

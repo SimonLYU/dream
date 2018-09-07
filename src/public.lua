@@ -29,6 +29,27 @@ function public.closeTiLiAlertIfNecessary()
 	end
 end
 
+--等到页面出现(左上角的返回按钮出现代表页面加载完毕)
+function public.waitUntilViewDidAppear()
+	public.clickLocation()
+	util.hudToast("等待页面加载完毕...")
+	mSleep(500)
+	x , y = util.findColor(0x12507a, 90, 100, 35, 260, 90)--返回的背景颜色:墨绿色
+	x1 , y1 = util.findColor(0xf8f8f7, 90, 100, 35, 260, 90)--文字颜色:白色
+	if x > -1 and x1 > -1 then
+		mSleep(500)
+		return true
+	else
+		if public.detect_world_map() then--保护如果此时在世界地图,则跳出循环
+			return true
+		else
+			public.waitUntilViewDidAppear()
+		end
+		
+		
+	end
+end
+
 --定位屏幕位置
 function public.func_start_init()
 	--重置系统锁屏时间
@@ -127,7 +148,7 @@ end
 
 --点击左下角定位按钮(空白位置click)
 function public.clickLocation()
-	util.click(125,1150)
+	util.click(75,1150)
 	mSleep(500)
 end
 

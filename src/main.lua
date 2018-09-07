@@ -28,8 +28,12 @@ function main()
 	_G["baoZangFlag"] = bb.strutils.contains(results["BaoZangCheckBoxGroup"],"0")--是否开启宝藏
 	_G["baoZangLevel"] = tonumber(results["BaoZangComboBox"])--宝藏等级
 	_G["jiBanLevel"] = tonumber(results["JiBanComboBox"])--羁绊之地等级
+	_G["timeLimit3Level"] = tonumber(results["TimeLimit3ComboBox"])--x限时任务3等级(黑暗之契约书-波赞鲁)
+	
 	_G["tiLiBuChong"] = tonumber(results["TiLiComboBox"])--体力不足面包补充
 	_G["endlessMission"] = tonumber(results["EndlessMissionComboBox"])--无限刷副本
+	--标记
+	_G["everyDayFinished"] = false
 	
 	--点击确认返回1, 取消返回0
 	if ret == 1 then
@@ -54,13 +58,29 @@ function main()
 	
 	repeat
 		public.func_start_init()
-		if CONFIG_everyday == 1 then
+		if CONFIG_everyday == 1  and not _G["everyDayFinished"] then
 			everyday.everyday_main()
 		end
 		if CONFIG_endlessMission == 1 then
 			everyday.endlessMission()
 		end
 		mSleep(500)
+	until(_G["everyDayFinished"])
+	
+	--跳出主循环后
+	
+	if _G["everyDayFinished"] then
+		--领取奖励
+		everyday.receiveAward()
+		
+		--任务结束提示
+		util.hudToast("已经没有附带奖励的副本了,建议开启无限模式")
+	end
+	
+	
+	repeat
+		--重置系统锁屏时间
+		resetIDLETimer()
 	until(false)
 end
 main()
